@@ -1,26 +1,64 @@
 import { useState, useEffect } from "react";
 import IdeaCard, { type BlogIdea } from "@/components/IdeaCard";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Trash2, Search } from "lucide-react";
+import { BookOpen, Trash2, Search, LogIn } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const SavedIdeas = () => {
   const [savedIdeas, setSavedIdeas] = useState<BlogIdea[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    loadSavedIdeas();
+    // Get current user and load ideas
+    const initializeAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      if (user) {
+        loadSavedIdeas();
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadSavedIdeas();
+      } else {
+        setSavedIdeas([]);
+        setIsLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const loadSavedIdeas = async () => {
+    if (!user) return;
+    
     try {
       setIsLoading(true);
-      // TODO: Load from Supabase database when connected
-      const saved = JSON.parse(localStorage.getItem("blogboost-saved-ideas") || "[]");
-      setSavedIdeas(saved);
+      const { data, error } = await supabase
+        .from('blog_ideas')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading saved ideas:', error);
+        toast.error("Failed to load saved ideas");
+      } else {
+        setSavedIdeas(data || []);
+      }
     } catch (error) {
       toast.error("Failed to load saved ideas");
       console.error("Error loading saved ideas:", error);
@@ -30,24 +68,49 @@ const SavedIdeas = () => {
   };
 
   const handleDeleteIdea = async (id: string) => {
+    if (!user) return;
+    
     try {
-      // TODO: Delete from Supabase database when connected
-      const updated = savedIdeas.filter(idea => idea.id !== id);
-      setSavedIdeas(updated);
-      localStorage.setItem("blogboost-saved-ideas", JSON.stringify(updated));
+      const { error } = await supabase
+        .from('blog_ideas')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error deleting idea:', error);
+        toast.error("Failed to delete idea");
+      } else {
+        setSavedIdeas(prev => prev.filter(idea => idea.id !== id));
+        toast.success("Idea deleted successfully");
+      }
     } catch (error) {
       toast.error("Failed to delete idea");
       console.error("Error deleting idea:", error);
     }
   };
 
-  const handleClearAll = () => {
-    if (savedIdeas.length === 0) return;
+  const handleClearAll = async () => {
+    if (savedIdeas.length === 0 || !user) return;
     
     if (window.confirm("Are you sure you want to delete all saved ideas? This action cannot be undone.")) {
-      setSavedIdeas([]);
-      localStorage.setItem("blogboost-saved-ideas", JSON.stringify([]));
-      toast.success("All ideas cleared successfully");
+      try {
+        const { error } = await supabase
+          .from('blog_ideas')
+          .delete()
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Error clearing all ideas:', error);
+          toast.error("Failed to clear all ideas");
+        } else {
+          setSavedIdeas([]);
+          toast.success("All ideas cleared successfully");
+        }
+      } catch (error) {
+        toast.error("Failed to clear all ideas");
+        console.error("Error clearing all ideas:", error);
+      }
     }
   };
 

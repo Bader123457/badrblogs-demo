@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import IdeaCard, { type BlogIdea } from "@/components/IdeaCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { Lightbulb, Sparkles, Wand2 } from "lucide-react";
+import { Lightbulb, Sparkles, Wand2, LogIn } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const Home = () => {
   const [topic, setTopic] = useState("");
   const [ideas, setIdeas] = useState<BlogIdea[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Get current user
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleGenerateIdeas = async () => {
     if (!topic.trim()) {
@@ -21,45 +38,22 @@ const Home = () => {
 
     setIsLoading(true);
     try {
-      // Simulate AI API call - will be replaced with real Supabase Edge Function
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mock generated ideas for now
-      const mockIdeas: BlogIdea[] = [
-        {
-          id: Date.now().toString() + Math.random(),
-          title: `10 Essential ${topic} Tips for Beginners`,
-          description: `A comprehensive guide covering the fundamental concepts and practical tips every beginner should know when starting their journey in ${topic}.`,
-          topic: topic
-        },
-        {
-          id: Date.now().toString() + Math.random() + 1,
-          title: `The Ultimate ${topic} Tools and Resources Guide`,
-          description: `Discover the best tools, software, and resources that professionals use to excel in ${topic}. Includes both free and premium options.`,
-          topic: topic
-        },
-        {
-          id: Date.now().toString() + Math.random() + 2,
-          title: `5 Common ${topic} Mistakes to Avoid`,
-          description: `Learn from others' experiences and avoid these costly mistakes that can slow down your progress in ${topic}.`,
-          topic: topic
-        },
-        {
-          id: Date.now().toString() + Math.random() + 3,
-          title: `How to Get Started with ${topic} in 2024`,
-          description: `A step-by-step roadmap for anyone looking to begin their journey in ${topic}, including current trends and best practices.`,
-          topic: topic
-        },
-        {
-          id: Date.now().toString() + Math.random() + 4,
-          title: `${topic} Success Stories: Lessons from Industry Leaders`,
-          description: `Inspiring case studies and insights from successful professionals who have made their mark in the ${topic} field.`,
-          topic: topic
-        }
-      ];
-      
-      setIdeas(mockIdeas);
-      toast.success(`Generated ${mockIdeas.length} creative ideas for "${topic}"!`);
+      const { data, error } = await supabase.functions.invoke('generate-blog-ideas', {
+        body: { topic }
+      });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        toast.error("Failed to generate ideas. Please try again.");
+        return;
+      }
+
+      if (data?.ideas) {
+        setIdeas(data.ideas);
+        toast.success(`Generated ${data.ideas.length} creative ideas for "${topic}"!`);
+      } else {
+        toast.error("No ideas were generated. Please try again.");
+      }
     } catch (error) {
       toast.error("Failed to generate ideas. Please try again.");
       console.error("Error generating ideas:", error);
@@ -69,16 +63,27 @@ const Home = () => {
   };
 
   const handleSaveIdea = async (idea: BlogIdea) => {
+    if (!user) {
+      toast.error("Please log in to save ideas");
+      return;
+    }
+
     try {
-      // TODO: Save to Supabase database when connected
-      const savedIdeas = JSON.parse(localStorage.getItem("blogboost-saved-ideas") || "[]");
-      const ideaToSave = {
-        ...idea,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString()
-      };
-      savedIdeas.push(ideaToSave);
-      localStorage.setItem("blogboost-saved-ideas", JSON.stringify(savedIdeas));
+      const { error } = await supabase
+        .from('blog_ideas')
+        .insert({
+          user_id: user.id,
+          title: idea.title,
+          description: idea.description,
+          topic: idea.topic
+        });
+
+      if (error) {
+        console.error('Error saving idea:', error);
+        toast.error("Failed to save idea. Please try again.");
+      } else {
+        toast.success("Idea saved successfully!");
+      }
     } catch (error) {
       toast.error("Failed to save idea. Please try again.");
       console.error("Error saving idea:", error);

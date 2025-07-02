@@ -1,9 +1,42 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, BookOpen, Sparkles } from "lucide-react";
+import { Lightbulb, BookOpen, Sparkles, LogIn, LogOut, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 const Navigation = () => {
   const location = useLocation();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+
+  useEffect(() => {
+    // Get current user
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Signed out successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to sign out");
+      console.error("Sign out error:", error);
+    }
+  };
   
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -54,6 +87,31 @@ const Navigation = () => {
                 <span className="sm:hidden">Saved</span>
               </Link>
             </Button>
+
+            {/* Auth Buttons */}
+            {user ? (
+              <Button
+                onClick={handleSignOut}
+                variant="outline"
+                size="sm"
+                className="flex items-center space-x-2"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="flex items-center space-x-2"
+              >
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4" />
+                  <span className="hidden sm:inline">Sign In</span>
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
