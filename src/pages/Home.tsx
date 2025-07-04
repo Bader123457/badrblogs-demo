@@ -1,34 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import IdeaCard, { type BlogIdea } from "@/components/IdeaCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { Lightbulb, Sparkles, Wand2, LogIn } from "lucide-react";
+import { Lightbulb, Sparkles, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import type { User } from "@supabase/supabase-js";
 
 const Home = () => {
   const [topic, setTopic] = useState("");
   const [ideas, setIdeas] = useState<BlogIdea[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    // Get current user
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const handleGenerateIdeas = async () => {
     if (!topic.trim()) {
@@ -62,33 +46,6 @@ const Home = () => {
     }
   };
 
-  const handleSaveIdea = async (idea: BlogIdea) => {
-    if (!user) {
-      toast.error("Please log in to save ideas");
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from('blog_ideas')
-        .insert({
-          user_id: user.id,
-          title: idea.title,
-          description: idea.description,
-          topic: idea.topic
-        });
-
-      if (error) {
-        console.error('Error saving idea:', error);
-        toast.error("Failed to save idea. Please try again.");
-      } else {
-        toast.success("Idea saved successfully!");
-      }
-    } catch (error) {
-      toast.error("Failed to save idea. Please try again.");
-      console.error("Error saving idea:", error);
-    }
-  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !isLoading) {
@@ -188,8 +145,6 @@ const Home = () => {
                 <IdeaCard
                   key={idea.id}
                   idea={idea}
-                  onSave={handleSaveIdea}
-                  isSaved={false}
                 />
               ))}
             </div>

@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Save, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { BookOpen } from "lucide-react";
 
 export interface BlogIdea {
   id?: string;
@@ -13,26 +11,9 @@ export interface BlogIdea {
 
 interface IdeaCardProps {
   idea: BlogIdea;
-  onSave?: (idea: BlogIdea) => void;
-  onDelete?: (id: string) => void;
-  isSaved?: boolean;
-  isLoading?: boolean;
 }
 
-const IdeaCard = ({ idea, onSave, onDelete, isSaved = false, isLoading = false }: IdeaCardProps) => {
-  const handleSave = () => {
-    if (onSave && !isLoading) {
-      onSave(idea);
-      toast.success("Idea saved successfully!");
-    }
-  };
-
-  const handleDelete = () => {
-    if (onDelete && idea.id && !isLoading) {
-      onDelete(idea.id);
-      toast.success("Idea deleted successfully!");
-    }
-  };
+const IdeaCard = ({ idea }: IdeaCardProps) => {
 
   return (
     <Card className="group relative overflow-hidden bg-gradient-card hover:shadow-elegant transition-all duration-300 border-border/50">
@@ -65,41 +46,13 @@ const IdeaCard = ({ idea, onSave, onDelete, isSaved = false, isLoading = false }
           </div>
         )}
         
-        <div className="flex items-center justify-between pt-2">
-          {idea.createdAt && (
+        {idea.createdAt && (
+          <div className="pt-2">
             <span className="text-xs text-muted-foreground">
               {new Date(idea.createdAt).toLocaleDateString()}
             </span>
-          )}
-          
-          <div className="flex items-center space-x-2">
-            {!isSaved && onSave && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleSave}
-                disabled={isLoading}
-                className="group/btn"
-              >
-                <Save className="h-3.5 w-3.5 mr-1.5 group-hover/btn:text-primary transition-colors" />
-                Save
-              </Button>
-            )}
-            
-            {isSaved && onDelete && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleDelete}
-                disabled={isLoading}
-                className="group/btn text-destructive hover:text-destructive"
-              >
-                <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                Delete
-              </Button>
-            )}
           </div>
-        </div>
+        )}
       </CardContent>
     </Card>
   );

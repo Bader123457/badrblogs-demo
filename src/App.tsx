@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
-import SavedIdeas from "./pages/SavedIdeas";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
@@ -20,7 +19,6 @@ const App = () => (
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/saved" element={<SavedIdeas />} />
           <Route path="/about" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
