@@ -88,30 +88,17 @@ const Navigation = () => {
               </Link>
             </Button>
 
-            {/* Auth Buttons */}
-            {user ? (
-              <Button
-                onClick={handleSignOut}
-                variant="outline"
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <Link to="/auth">
-                  <LogIn className="h-4 w-4" />
-                  <span className="hidden sm:inline">Sign In</span>
-                </Link>
-              </Button>
-            )}
+            <Button
+              asChild
+              variant={location.pathname === "/about" ? "default" : "ghost"}
+              size="sm"
+              className="flex items-center space-x-2"
+            >
+              <Link to="/about">
+                <User className="h-4 w-4" />
+                <span className="hidden sm:inline">About</span>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

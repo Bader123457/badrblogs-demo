@@ -1,73 +1,143 @@
-# Welcome to your Lovable project
+# BlogBoost
 
-## Project info
+A modern AI-powered blog idea generator that helps content creators generate engaging blog post ideas instantly.
 
-**URL**: https://lovable.dev/projects/5c3c23e2-8169-4b2b-bea8-a6ed06fa1e37
+## Features
 
-## How can I edit this code?
+- **AI-Powered Generation**: Generate creative blog post titles and descriptions using OpenAI's GPT models
+- **Topic-Based Ideas**: Input any topic or niche to get 5 tailored blog post ideas
+- **Save & Organize**: Save your favorite ideas for later reference (authentication required)
+- **Responsive Design**: Beautiful, mobile-first design that works on all devices
+- **Real-time Generation**: Fast idea generation with loading states and error handling
 
-There are several ways of editing your application.
+## Technologies Used
 
-**Use Lovable**
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Supabase (Database, Auth, Edge Functions)
+- **AI**: OpenAI GPT-4o-mini API
+- **State Management**: React Query for server state
+- **Routing**: React Router DOM
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5c3c23e2-8169-4b2b-bea8-a6ed06fa1e37) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ and npm
+- Supabase account and project
+- OpenAI API key (optional - app includes fallback mock data)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Environment Variables
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Create a Supabase project and configure these environment variables in your Supabase dashboard:
 
-Follow these steps:
+```bash
+# Supabase Secrets (configure in Supabase Dashboard > Settings > Secrets)
+OPENAI_API_KEY=your_openai_api_key_here  # Optional - fallback data will be used if not provided
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd blogboost
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install dependencies:
+```bash
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Set up Supabase:
+   - Create a new Supabase project
+   - Run the included migrations to set up the database schema
+   - Configure authentication providers as needed
+
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+5. Open [http://localhost:5173](http://localhost:5173) in your browser
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Database Schema
 
-**Use GitHub Codespaces**
+The app uses a simple `blog_ideas` table with Row Level Security (RLS) policies:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sql
+- id (uuid, primary key)
+- user_id (uuid, references auth.users)
+- title (text)
+- description (text)
+- topic (text, optional)
+- created_at (timestamp)
+- updated_at (timestamp)
+```
 
-## What technologies are used for this project?
+## API Integration
 
-This project is built with:
+### OpenAI Integration
+- Uses GPT-4o-mini for generating blog ideas
+- Includes comprehensive error handling
+- Falls back to mock data if API is unavailable
+- Configurable temperature and token limits
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Edge Functions
+- `generate-blog-ideas`: Processes topic input and returns structured blog ideas
+- Includes CORS handling for web app integration
+- Built-in fallback system for reliability
 
-## How can I deploy this project?
+## Development
 
-Simply open [Lovable](https://lovable.dev/projects/5c3c23e2-8169-4b2b-bea8-a6ed06fa1e37) and click on Share -> Publish.
+### Project Structure
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Route components
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+├── integrations/       # Third-party service integrations
+└── index.css          # Global styles and design tokens
 
-## Can I connect a custom domain to my Lovable project?
+supabase/
+├── functions/          # Edge functions
+└── migrations/         # Database migrations
+```
 
-Yes, you can!
+### Design System
+- Uses semantic color tokens defined in `index.css`
+- Consistent spacing and typography scale
+- Dark/light mode support
+- Mobile-first responsive design
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Deployment
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The app can be deployed to any static hosting service:
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Deploy the `dist` folder to your hosting service
+3. Configure Supabase environment variables in your hosting dashboard
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -am 'Add feature'`
+4. Push to the branch: `git push origin feature-name`
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built with modern React and TypeScript best practices
+- Styled with Tailwind CSS and shadcn/ui components
+- Powered by Supabase for backend functionality
+- AI capabilities provided by OpenAI's GPT models

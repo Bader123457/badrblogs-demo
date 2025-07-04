@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import SavedIdeas from "./pages/SavedIdeas";
-import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,7 +21,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/saved" element={<SavedIdeas />} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/about" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
