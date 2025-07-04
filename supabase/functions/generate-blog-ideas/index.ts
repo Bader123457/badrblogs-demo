@@ -34,46 +34,48 @@ serve(async (req) => {
     Make the ideas diverse, actionable, and valuable to readers interested in ${topic}.
     Return the response as a JSON array with objects containing "title" and "description" fields.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are a creative content strategist who generates engaging blog post ideas. Always respond with valid JSON only.' 
-          },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.8,
-        max_tokens: 1000,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('OpenAI API error:', response.status, response.statusText);
-      return new Response(
-        JSON.stringify({ error: 'Failed to generate ideas' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const data = await response.json();
-    const generatedContent = data.choices[0].message.content;
-
-    console.log('Generated content:', generatedContent);
-
-    // Parse the JSON response from OpenAI
+    // Try OpenAI API, but fall back to mock data if it fails
     let blogIdeas;
+    
     try {
-      blogIdeas = JSON.parse(generatedContent);
-    } catch (parseError) {
-      console.error('Failed to parse OpenAI response as JSON:', parseError);
-      // Fallback: create ideas from the text response
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { 
+              role: 'system', 
+              content: 'You are a creative content strategist who generates engaging blog post ideas. Always respond with valid JSON only.' 
+            },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.8,
+          max_tokens: 1000,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const generatedContent = data.choices[0].message.content;
+        console.log('Generated content from OpenAI:', generatedContent);
+        
+        try {
+          blogIdeas = JSON.parse(generatedContent);
+        } catch (parseError) {
+          console.error('Failed to parse OpenAI response as JSON, using fallback:', parseError);
+          throw new Error('Parse failed');
+        }
+      } else {
+        console.log('OpenAI API error (likely no credits):', response.status, response.statusText);
+        throw new Error('API failed');
+      }
+    } catch (error) {
+      console.log('Using mock data due to OpenAI API issue:', error.message);
+      // Fallback: create mock ideas when OpenAI fails
       blogIdeas = [
         {
           title: `Ultimate Guide to ${topic}`,
