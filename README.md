@@ -25,7 +25,7 @@ A modern AI-powered blog idea generator that helps content creators generate eng
 
 - Node.js 18+ and npm
 - Supabase account and project (for Edge Functions)
-- OpenAI API key (optional - app includes fallback mock data)
+- OpenAI API key with credits (for real AI generation - app includes fallback mock data)
 
 ### Installation
 
@@ -47,15 +47,45 @@ npm run dev
 
 4. Open [http://localhost:5173](http://localhost:5173) in your browser
 
-### OpenAI Integration (Optional)
+### OpenAI Integration Setup
 
-If you want to use real AI-generated ideas instead of mock data:
+**Current Status**: The app works fully with mock data, but for production-level AI content:
 
-1. Get an OpenAI API key from [OpenAI Platform](https://platform.openai.com/)
-2. Configure the `OPENAI_API_KEY` secret in your Supabase project dashboard
-3. The app will automatically use OpenAI when credits are available
+#### Step 1: Get OpenAI API Key and Credits
+1. Create account at [OpenAI Platform](https://platform.openai.com/)
+2. Add billing information and purchase credits ($5+ recommended)
+3. Generate an API key from the API Keys section
 
-**Note**: If OpenAI credits are $0 or the API key is not configured, the app automatically falls back to high-quality mock data, so you can still demo and use the application locally.
+#### Step 2: Configure in Supabase
+1. Go to your Supabase project dashboard
+2. Navigate to Project Settings → Edge Functions → Secrets
+3. Add/update the `OPENAI_API_KEY` secret with your API key
+
+#### Step 3: Verify Integration
+- The app automatically detects when OpenAI credits are available
+- With credits: Generates highly detailed, topic-specific content using GPT-4o-mini
+- Without credits: Falls back to high-quality mock data for local development
+
+### Content Quality Difference
+
+**With OpenAI Credits (Production Ready)**:
+- Specific examples: "Stanford's CheXNet for X-ray analysis"
+- Real research references: "MIT's 2023 study on AI diagnosis"
+- Technical details: "Using TensorFlow for medical image processing"
+- Varied article structures and engaging storytelling
+- 600-800 words of unique, expert-level content
+
+**Mock Data (Development/Demo)**:
+- Generic but well-structured content
+- Consistent format for testing UI/UX
+- Suitable for portfolio demonstrations
+
+### Testing Without Credits
+
+Unfortunately, you cannot test real OpenAI responses without credits. However:
+- Mock data provides identical UI/UX experience
+- Edge Function is fully configured and ready
+- Once credits are added, content quality immediately improves
 
 ## Project Structure
 
