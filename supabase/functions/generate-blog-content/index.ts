@@ -26,54 +26,66 @@ serve(async (req) => {
 
     console.log(`Generating blog content for: ${title}`);
 
-    const prompt = `Write a comprehensive, engaging blog post based on the following:
-    
-    Title: "${title}"
-    Description: "${description}"
-    Topic: "${topic || 'General'}"
-    
-    Requirements:
-    - Write a complete blog post of 500-700 words
-    - Use a conversational, engaging tone that connects with readers
-    - Include unique facts, examples, and details specific to "${topic || 'this topic'}"
-    - Avoid generic filler language or vague advice
-    - Structure with clear headings and subheadings using markdown (## for h2, ### for h3)
-    - Include an engaging introduction, at least 3 detailed main sections, and a compelling conclusion
-    
-    Topic-Specific Guidelines:
-    ${topic?.toLowerCase().includes('travel') || topic?.toLowerCase().includes('egypt') || topic?.toLowerCase().includes('destination') ? 
-      `For travel content, include:
-      - Cultural insights and local customs
-      - Historical details and significance
-      - Practical local tips and insider knowledge
-      - Specific landmarks, locations, or experiences
-      - Common travel challenges and how to overcome them
-      - Recommended itineraries or timing advice` :
-      topic?.toLowerCase().includes('tech') || topic?.toLowerCase().includes('programming') || topic?.toLowerCase().includes('software') ?
-      `For technical content, include:
-      - Practical code examples or step-by-step instructions
-      - Industry best practices and proven methodologies
-      - Common mistakes to avoid with specific examples
-      - Real-world use cases and scenarios
-      - Tool recommendations and comparisons
-      - Performance tips and optimization strategies` :
-      `For this topic, include:
-      - Specific examples and case studies
-      - Actionable tips that readers can implement immediately
-      - Expert insights and proven strategies
-      - Common pitfalls and how to avoid them
-      - Step-by-step guidance where applicable
-      - Resource recommendations and next steps`
-    }
-    
-    Content Structure:
-    - Hook readers in the introduction with a compelling opening
-    - Use storytelling elements and real examples throughout
-    - Include numbered lists, bullet points, and practical takeaways
-    - End with a strong conclusion that motivates action
-    - Write in second person ("you") to engage readers directly
-    
-    Write the blog post content only, without any meta information or explanations. Make it unique, valuable, and specific to the topic.`;
+    const prompt = `Write an in-depth, highly specific blog post about: "${title}"
+
+CRITICAL REQUIREMENTS:
+- Topic: "${topic || 'General'}"
+- Description context: "${description}"
+- Length: 600-800 words
+- Write as an expert who has deep, firsthand knowledge of this subject
+- Include SPECIFIC names, tools, studies, locations, or examples - never use generic placeholders
+- Vary your structure - avoid the template "intro → 3 sections → conclusion" format
+- Use storytelling, anecdotes, and personal insights
+- Mention specific research, companies, technologies, or real-world applications
+
+TOPIC-SPECIFIC REQUIREMENTS:
+${topic?.toLowerCase().includes('travel') || topic?.toLowerCase().includes('egypt') || topic?.toLowerCase().includes('destination') ? 
+  `TRAVEL CONTENT - Include specific details like:
+  - Exact landmark names (e.g., "Karnak Temple Complex," "Valley of the Kings")
+  - Cultural specifics (e.g., "In Egypt, saying 'La shukran' means no thank you")
+  - Practical details (e.g., "The Cairo Metro costs 5 EGP per ride")
+  - Real insider tips (e.g., "Book Uber in Egypt using 'Careem' app")
+  - Historical context with dates and names
+  - Personal travel stories or observations
+  - Local food names and where to find them
+  - Transportation specifics and pricing` :
+  topic?.toLowerCase().includes('tech') || topic?.toLowerCase().includes('programming') || topic?.toLowerCase().includes('software') || topic?.toLowerCase().includes('medicine') || topic?.toLowerCase().includes('computer') ?
+  `TECHNICAL CONTENT - Include specific details like:
+  - Exact technology names (e.g., "TensorFlow 2.x," "Stanford's CheXNet model")
+  - Real code snippets or technical specifications
+  - Specific companies and their solutions (e.g., "Google DeepMind's AlphaFold")
+  - Research studies with names/dates (e.g., "MIT's 2023 study on AI diagnosis")
+  - Tool comparisons with pros/cons
+  - Performance metrics and benchmarks
+  - Real implementation examples
+  - Industry case studies with company names` :
+  `GENERAL CONTENT - Include specific details like:
+  - Real company examples and case studies
+  - Specific statistics with sources
+  - Named experts or thought leaders in the field
+  - Concrete tools, apps, or resources with names
+  - Research findings with institutions/dates
+  - Specific methodologies or frameworks
+  - Real-world implementation examples
+  - Industry trends with supporting data`
+}
+
+WRITING STYLE:
+- Write conversationally, like you're sharing expertise with a friend
+- Use "I've found that..." or "In my experience..." where appropriate
+- Include specific examples: "For instance, when I was working with X..."
+- Avoid generic advice like "research is important" - be specific about WHAT to research
+- Use varied sentence structures and paragraph lengths
+- Include surprising facts or lesser-known insights
+- Reference credible sources by name when possible
+
+STRUCTURE VARIETY:
+- Don't always use the same format
+- Consider: Problem → Solution, Story → Lesson, Comparison → Recommendation
+- Use subheadings that reflect the actual content, not generic ones
+- Include practical next steps that are specific to this topic
+
+Write the complete blog post now, ensuring every paragraph adds unique value:`;
 
     // Try OpenAI API, but fall back to mock content if it fails
     let blogContent;
