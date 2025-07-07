@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export interface BlogIdea {
   id?: string;
@@ -14,9 +15,20 @@ interface IdeaCardProps {
 }
 
 const IdeaCard = ({ idea }: IdeaCardProps) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    // Store the current ideas in localStorage for the blog details page
+    const currentIdeas = [idea]; // You can store multiple ideas if needed
+    localStorage.setItem('lastGeneratedIdeas', JSON.stringify(currentIdeas));
+    navigate(`/blog/${idea.id}`);
+  };
 
   return (
-    <Card className="group relative overflow-hidden bg-gradient-card hover:shadow-elegant transition-all duration-300 border-border/50">
+    <Card 
+      className="group relative overflow-hidden bg-gradient-card hover:shadow-elegant transition-all duration-300 border-border/50 cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       

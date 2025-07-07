@@ -34,6 +34,8 @@ const Home = () => {
 
       if (data?.ideas) {
         setIdeas(data.ideas);
+        // Store generated ideas in localStorage for blog details page
+        localStorage.setItem('lastGeneratedIdeas', JSON.stringify(data.ideas));
         toast.success(`Generated ${data.ideas.length} creative ideas for "${topic}"!`);
       } else {
         toast.error("No ideas were generated. Please try again.");

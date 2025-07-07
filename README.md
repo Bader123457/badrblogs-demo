@@ -5,6 +5,7 @@ A modern AI-powered blog idea generator that helps content creators generate eng
 ## Features
 
 - **AI-Powered Generation**: Generate creative blog post titles and descriptions using OpenAI's GPT models
+- **Full Blog Content**: Click any idea to generate complete blog posts with AI-powered content
 - **Topic-Based Ideas**: Input any topic or niche to get 5 tailored blog post ideas
 - **Responsive Design**: Beautiful, mobile-first design that works on all devices
 - **Real-time Generation**: Fast idea generation with loading states and error handling
