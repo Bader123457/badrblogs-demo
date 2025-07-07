@@ -93,6 +93,17 @@ const BlogDetails = () => {
     }
   };
 
+  const formatBlogContent = (content: string): string => {
+    return content
+      .replace(/\n/g, '<br />')
+      .replace(/## (.*?)<br \/>/g, '<h2 style="font-size: 1.75rem; font-weight: 700; margin: 2rem 0 1rem 0; color: hsl(var(--foreground)); border-bottom: 2px solid hsl(var(--border)); padding-bottom: 0.5rem;">$1</h2>')
+      .replace(/### (.*?)<br \/>/g, '<h3 style="font-size: 1.4rem; font-weight: 600; margin: 1.5rem 0 0.75rem 0; color: hsl(var(--foreground));">$1</h3>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 600; color: hsl(var(--foreground));">$1</strong>')
+      .replace(/- (.*?)<br \/>/g, '<li style="margin: 0.5rem 0; padding-left: 0.5rem;">$1</li>')
+      .replace(/```([\s\S]*?)```/g, '<pre style="background: hsl(var(--muted)); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0; overflow-x: auto;"><code>$1</code></pre>')
+      .replace(/`(.*?)`/g, '<code style="background: hsl(var(--muted)); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">$1</code>');
+  };
+
   const generateMockContent = (title: string, description: string): string => {
     return `
 ## Introduction
@@ -225,14 +236,14 @@ Keep experimenting, stay curious, and most importantly, enjoy the process of lea
         <Card className="bg-card border-border/50 shadow-card">
           <CardContent className="p-8">
             <div className="prose prose-lg max-w-none">
-              <div 
-                className="text-foreground leading-relaxed"
+                <div 
+                className="text-foreground leading-relaxed prose prose-lg max-w-none"
                 style={{ 
                   lineHeight: '1.8',
                   fontSize: '1.1rem'
                 }}
                 dangerouslySetInnerHTML={{ 
-                  __html: blog.content.replace(/\n/g, '<br />').replace(/## (.*?)<br \/>/g, '<h2 style="font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem 0; color: hsl(var(--foreground));">$1</h2>').replace(/### (.*?)<br \/>/g, '<h3 style="font-size: 1.25rem; font-weight: 600; margin: 1.5rem 0 0.5rem 0; color: hsl(var(--foreground));">$1</h3>').replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 600;">$1</strong>') 
+                  __html: formatBlogContent(blog.content)
                 }}
               />
             </div>
