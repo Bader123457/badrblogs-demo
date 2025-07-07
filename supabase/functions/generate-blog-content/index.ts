@@ -291,12 +291,12 @@ Understanding the foundational concepts is crucial for long-term success:
 ### Getting Started: Step-by-Step Guide
 
 **Step 1: Environment Setup**
-```
+\`\`\`bash
 # Example configuration
 npm install
 npm run setup
 npm run dev
-```
+\`\`\`
 
 **Step 2: Basic Implementation**
 Start with a minimal viable example and gradually add complexity:
