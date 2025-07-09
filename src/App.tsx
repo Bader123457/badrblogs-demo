@@ -9,7 +9,7 @@ import Landing from "./pages/Landing";
 import BlogDetails from "./pages/BlogDetails";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient(); // just adding a comment 
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
