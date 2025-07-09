@@ -19,7 +19,7 @@ const Navigation = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                BlogBoost
+                Badrblogs
               </span>
               <span className="text-xs text-muted-foreground -mt-1">
                 AI Blog Ideas

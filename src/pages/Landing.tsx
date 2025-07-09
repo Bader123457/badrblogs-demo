@@ -16,7 +16,7 @@ const Landing = () => {
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
               <span className="bg-gradient-primary bg-clip-text text-transparent">
-                BlogBoost
+                Badrblogs
               </span>
             </h1>
             
@@ -33,7 +33,7 @@ const Landing = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button size="lg" variant="hero" className="text-lg px-8 py-4">
               <Wand2 className="h-5 w-5 mr-2" />
-              Try BlogBoost Now
+              Try Badrblogs Now
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 py-4">
               <BookOpen className="h-5 w-5 mr-2" />
@@ -111,7 +111,7 @@ const Landing = () => {
               </div>
               <h3 className="text-xl font-semibold text-foreground">Easy to Use</h3>
               <p className="text-muted-foreground">
-                Simply enter your topic and let BlogBoost do the rest. No complex setup, no learning curve required.
+                Simply enter your topic and let Badrblogs do the rest. No complex setup, no learning curve required.
               </p>
             </CardContent>
           </Card>
@@ -161,14 +161,26 @@ const Landing = () => {
           </div>
         </div>
 
+        {/* About Section */}
+        <div className="text-center space-y-8 max-w-3xl mx-auto mb-16">
+          <div className="space-y-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
+              About the Creator
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              This project was created by Badreldin Elsayed, First Year Computer Science Student at the University of Manchester.
+            </p>
+          </div>
+        </div>
+
         {/* CTA Section */}
         <div className="text-center space-y-8 max-w-3xl mx-auto">
           <div className="space-y-4">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-              Ready to Boost Your Blog?
+              Ready to Create Amazing Blogs?
             </h2>
             <p className="text-xl text-muted-foreground">
-              Join thousands of content creators who use BlogBoost to generate endless blog ideas
+              Join thousands of content creators who use Badrblogs to generate endless blog ideas
             </p>
           </div>
 

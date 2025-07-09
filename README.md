@@ -1,6 +1,6 @@
-# BlogBoost
+# Badrblogs
 
-A modern AI-powered blog idea generator that helps content creators generate engaging blog post ideas instantly.
+A modern AI-powered blog idea generator created by Badreldin Elsayed that helps content creators generate engaging blog post ideas instantly.
 
 ## Features
 
@@ -32,7 +32,7 @@ A modern AI-powered blog idea generator that helps content creators generate eng
 1. Clone the repository:
 ```bash
 git clone <your-repo-url>
-cd blogboost
+cd badrblogs
 ```
 
 2. Install dependencies:
@@ -108,6 +108,10 @@ npm run build
 ```
 
 2. Deploy the `dist` folder to your hosting service (Vercel, Netlify, etc.)
+
+## Author
+
+Created by **Badreldin Elsayed**, First Year Computer Science Student at the University of Manchester.
 
 ## License
 
