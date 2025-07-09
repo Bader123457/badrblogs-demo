@@ -49,43 +49,30 @@ npm run dev
 
 ### OpenAI Integration Setup
 
-**Current Status**: The app works fully with mock data, but for production-level AI content:
+**Status**: ✅ **PRODUCTION READY** - Real OpenAI integration enabled!
 
-#### Step 1: Get OpenAI API Key and Credits
-1. Create account at [OpenAI Platform](https://platform.openai.com/)
-2. Add billing information and purchase credits ($5+ recommended)
-3. Generate an API key from the API Keys section
+#### Requirements
+1. OpenAI API key with sufficient credits ($5+ recommended)
+2. API key configured in Supabase secrets
 
-#### Step 2: Configure in Supabase
-1. Go to your Supabase project dashboard
-2. Navigate to Project Settings → Edge Functions → Secrets
-3. Add/update the `OPENAI_API_KEY` secret with your API key
+#### Configuration
+1. Your OpenAI API key should already be configured in Supabase
+2. If not configured, go to: Project Settings → Edge Functions → Secrets
+3. Add/update the `OPENAI_API_KEY` secret
 
-#### Step 3: Verify Integration
-- The app automatically detects when OpenAI credits are available
-- With credits: Generates highly detailed, topic-specific content using GPT-4o-mini
-- Without credits: Falls back to high-quality mock data for local development
+#### Content Quality
+**Production-Level AI Content**:
+- ✅ Specific examples: "Stanford's CheXNet for X-ray analysis"
+- ✅ Real research references: "MIT's 2023 study on AI diagnosis" 
+- ✅ Technical details: "Using TensorFlow for medical image processing"
+- ✅ Varied article structures and engaging storytelling
+- ✅ 600-800 words of unique, expert-level content
+- ✅ Topic-specific details (landmarks for travel, code for tech, etc.)
 
-### Content Quality Difference
-
-**With OpenAI Credits (Production Ready)**:
-- Specific examples: "Stanford's CheXNet for X-ray analysis"
-- Real research references: "MIT's 2023 study on AI diagnosis"
-- Technical details: "Using TensorFlow for medical image processing"
-- Varied article structures and engaging storytelling
-- 600-800 words of unique, expert-level content
-
-**Mock Data (Development/Demo)**:
-- Generic but well-structured content
-- Consistent format for testing UI/UX
-- Suitable for portfolio demonstrations
-
-### Testing Without Credits
-
-Unfortunately, you cannot test real OpenAI responses without credits. However:
-- Mock data provides identical UI/UX experience
-- Edge Function is fully configured and ready
-- Once credits are added, content quality immediately improves
+#### Error Handling
+- **No API key**: Clear error message with configuration instructions
+- **No credits**: Specific error asking to add credits to OpenAI account
+- **Rate limits**: Proper error handling with retry suggestions
 
 ## Project Structure
 
