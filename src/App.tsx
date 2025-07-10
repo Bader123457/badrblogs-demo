@@ -8,13 +8,14 @@ import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import BlogDetails from "./pages/BlogDetails";
 import NotFound from "./pages/NotFound";
+// just adding a new comment as well 
 
 const queryClient = new QueryClient(); // just adding a comment 
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
+      <Toaster /> 
       <Sonner />
       <BrowserRouter>
         <Navigation />
