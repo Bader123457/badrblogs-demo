@@ -1,6 +1,6 @@
 # Badrblogs
 
-A modern AI-powered blog idea generator created by Badreldin Elsayed that helps content creators generate engaging blog post ideas instantly.
+A modern AI-powered blog idea generator that helps content creators generate engaging blog post ideas instantly.
 
 ## Features
 
@@ -29,23 +29,7 @@ A modern AI-powered blog idea generator created by Badreldin Elsayed that helps 
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <your-repo-url>
-cd badrblogs
-```
 
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:5173](http://localhost:5173) in your browser
 
 ### OpenAI Integration Setup
 
@@ -100,22 +84,24 @@ supabase/
 
 ## Deployment
 
-The app can be deployed to any static hosting service:
-
-1. Build the project:
-```bash
-npm run build
-```
-
-2. Deploy the `dist` folder to your hosting service (Vercel, Netlify, etc.)
+This app will later be deployed using Azure. 
 
 ## Author
 
-Created by **Badreldin Elsayed**, First Year Computer Science Student at the University of Manchester.
+Created by **Badreldin Elsayed**, First Year Computer Science Student at the University of Manchester. I personally created this project because it seemed as a brilliant idea to me, and I gained a lot of experience and learnt new things from building it. 
 
-## License
+## Skills Gained 
+- Basic Frontend Development (Was learning frontend skills while building, still a beginner in frontend though) 
+- API Integration 
+- Cloud & Serverless Backends
+- AI Integration and Engineering 
+- Security
+- Software Engineering Workflows (Version control with Git & GitHub, Branching, merges, conflict resolution,Writing clean commit messages)
 
-This project is licensed under the MIT License.
+## Problems Faced
+Two main problems were faced building this project:  
+- At the beginning of working on this project I was facing very huge issues with pushing my commits, I had to use AI for that. 
+- Faced a lot of difficulty implementing OpenAI API into my module, was able to overcome this problem but took a lot of time and hard work.  
 
 ## Tech Stack
 
