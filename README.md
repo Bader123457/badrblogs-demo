@@ -27,7 +27,7 @@ A modern AI-powered blog idea generator that helps content creators generate eng
 - Supabase account and project (for Edge Functions)
 - OpenAI API key with credits (for real AI generation - app includes fallback mock data)
 
-### Installation
+
 
 
 
@@ -36,14 +36,7 @@ A modern AI-powered blog idea generator that helps content creators generate eng
 **Status**: ✅ **PRODUCTION READY** - Real OpenAI integration enabled!
 
 #### Requirements
-1. OpenAI API key with sufficient credits ($5+ recommended)
-2. API key configured in Supabase secrets
-
-#### Configuration
-1. Your OpenAI API key should already be configured in Supabase
-2. If not configured, go to: Project Settings → Edge Functions → Secrets
-3. Add/update the `OPENAI_API_KEY` secret
-
+1. OpenAI API key must consist of suffecient credits 
 #### Content Quality
 **Production-Level AI Content**:
 - ✅ Specific examples: "Stanford's CheXNet for X-ray analysis"
